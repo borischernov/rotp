@@ -3,7 +3,7 @@ module ROTP
     attr_reader :secret, :digits, :digest
     DEFAULT_DIGITS = 6
 
-    # @param [String] secret in the form of base32
+    # @param [String] secret in the form of base32 or in plain form if options[:plain_secret] is true
     # @option options digits [Integer] (6)
     #     Number of integers in the OTP
     #     Google Authenticate only supports 6 currently
@@ -14,6 +14,7 @@ module ROTP
     def initialize(s, options = {})
       @digits = options[:digits] || DEFAULT_DIGITS
       @digest = options[:digest] || "sha1"
+      @plain_secret = !!options[:plain_secret]
       @secret = s
     end
 
@@ -50,7 +51,7 @@ module ROTP
     end
 
     def byte_secret
-      Base32.decode(@secret)
+      @plain_secret ? @secret : Base32.decode(@secret)
     end
 
     # Turns an integer to the OATH specified
