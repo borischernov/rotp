@@ -29,6 +29,9 @@ gem install rotp
 totp = ROTP::TOTP.new("base32secret3232")
 totp.now # => "492039"
 
+totp = ROTP::TOTP.new("PlainSecret\xF0\xAB", plain_secret: true)
+totp.now # => "612177"
+
 # OTP verified for current time
 totp.verify("492039") # => true
 sleep 30
